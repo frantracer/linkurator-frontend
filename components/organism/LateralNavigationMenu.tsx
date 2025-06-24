@@ -13,7 +13,7 @@ import {AddIcon, BookmarkSquaredFilled, FunnelIcon, RectangleGroup, UserIconFill
 import SearchBar from "../molecules/SearchBar";
 import LateralSubscriptionList from "./LateralSubscriptionList";
 import LateralTopicList from "./LateralTopicList";
-import {openModal} from "../../utilities/modalAction";
+import {closeModal, openModal} from "../../utilities/modalAction";
 import NewTopicModal, {NewTopicModalId} from "./NewTopicModal";
 import Button from "../atoms/Button";
 import Avatar from "../atoms/Avatar";
@@ -32,6 +32,7 @@ import {SUBSCRIPTION_DETAILS_ID} from "./SubscriptionDetails";
 import {TOPIC_DETAILS_ID} from "./TopicDetails";
 import {CURATOR_DETAILS_ID} from "./CuratorDetails";
 import {useTranslations} from "next-intl";
+import SearchModal, { SearchModalId } from "./SearchModal";
 
 export const LATERAL_NAVIGATION_MENU_ID = 'lateral-navigation-menu';
 
@@ -101,6 +102,11 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
     closeMenu();
   }
 
+  const openSearchModal = () => {
+    openModal(SearchModalId);
+    closeMenu();
+  }
+
   const openFilters = (page: CurrentPage) => {
     switch (page) {
       case 'subscriptions':
@@ -150,7 +156,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
         {profile &&
             <FlexRow>
                 <FlexItem grow={true}>
-                    <SearchBar value={searchValue} placeholder={t("search_placeholder")} handleChange={setSearchValue}/>
+                    <SearchBar placeholder={t("search_placeholder")} handleClick={openSearchModal}/>
                 </FlexItem>
                 <FlexItem shrink={false}>
                     <Button fitContent={true} clickAction={() => openFilters(currentPage)}>
@@ -258,6 +264,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
       <NewTopicModal refreshTopics={refreshTopics} subscriptions={subscriptions}/>
       <NewSubscriptionModal refreshSubscriptions={refreshSubscriptions}/>
       <FolowCuratorModal refreshCurators={refreshCurators} curators={curators}/>
+      <SearchModal onClose={() => closeModal(SearchModalId)}/>
       {
         children
       }

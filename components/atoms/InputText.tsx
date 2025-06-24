@@ -9,6 +9,7 @@ type InputTextProps = {
   placeholder?: string;
   withLeftPadding?: boolean;
   onChange?: (value: string) => void;
+  onClick?: () => void;
   value?: string;
   disabled?: boolean;
   inputType?: InputType;
@@ -19,6 +20,7 @@ const InputText = (
     placeholder = "Input",
     withLeftPadding = false,
     onChange = undefined,
+    onClick = undefined,
     value = "",
     disabled = false,
     inputType = InputType.TEXT
@@ -47,6 +49,7 @@ const InputText = (
           onChange(e.target.value);
         }
       }}
+      onClick={onClick}
     />
   );
 }
