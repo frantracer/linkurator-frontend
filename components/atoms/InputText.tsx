@@ -25,6 +25,7 @@ const InputText = (
     value = "",
     disabled = false,
     inputType = InputType.TEXT,
+    autofocus = false,
   }: InputTextProps) => {
   const [searchValue, setSearchValue] = useState(value);
 
@@ -44,6 +45,7 @@ const InputText = (
       placeholder={placeholder}
       value={searchValue}
       disabled={disabled}
+      autoFocus={autofocus}
       onChange={(e) => {
         setSearchValue(e.target.value);
         if (onChange) {

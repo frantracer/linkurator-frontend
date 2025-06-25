@@ -61,6 +61,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
           placeholder={t('search_topics_subscriptions_curators')}
           value={searchValue}
           handleChange={setSearchValue}
+          autofocus={true}
         />
         <div className={"h-96 w-full overflow-y-auto p-1"}>
           <FlexColumn>
