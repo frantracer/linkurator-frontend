@@ -1,4 +1,4 @@
-import React, { useState, RefObject } from 'react';
+import React, { useState } from 'react';
 import Modal from '../atoms/Modal';
 import Box from '../atoms/Box';
 import Menu from '../atoms/Menu';
@@ -12,6 +12,9 @@ import { useTopics } from '../../hooks/useTopics';
 import useSubscriptions from '../../hooks/useSubscriptions';
 import { useCurators } from '../../hooks/useCurators';
 import { useDebounce } from '../../hooks/useDebounce';
+import { Topic } from '../../entities/Topic';
+import { Subscription } from '../../entities/Subscription';
+import { Curator } from '../../entities/Curators';
 
 export const SearchModalId = 'search-modal';
 
@@ -34,6 +37,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
 
   return (
     <Modal id={SearchModalId} onClose={onClose}>
+
       <FlexColumn>
         <h1 className="font-bold text-xl w-full text-center">Search</h1>
         <SearchBar
@@ -41,51 +45,59 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
           value={searchValue}
           handleChange={setSearchValue}
         />
-        <Box title={`Topics (${filteredTopics.length})`}>
-          <Menu>
-            {filteredTopics.length === 0 && debouncedSearch !== '' && (
-              <MenuItem>No topics found.</MenuItem>
-            )}
-            {filteredTopics.map((topic: any) => (
-              <MenuItem key={topic.uuid}>
-                <FlexRow position="start">
-                  <Miniature src={topic.curator.avatar_url} alt={topic.curator.username} />
-                  <span>{topic.name}</span>
-                </FlexRow>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-        <Box title={`Subscriptions (${filteredSubscriptions.length})`}>
-          <Menu>
-            {filteredSubscriptions.length === 0 && debouncedSearch !== '' && (
-              <MenuItem>No subscriptions found.</MenuItem>
-            )}
-            {filteredSubscriptions.map((sub: any) => (
-              <MenuItem key={sub.uuid}>
-                <FlexRow position="start">
-                  <Miniature src={sub.thumbnail} alt={sub.name} />
-                  <span>{sub.name}</span>
-                </FlexRow>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-        <Box title={`Curators (${filteredCurators.length})`}>
-          <Menu>
-            {filteredCurators.length === 0 && debouncedSearch !== '' && (
-              <MenuItem>No curators found.</MenuItem>
-            )}
-            {filteredCurators.map((curator: any) => (
-              <MenuItem key={curator.id}>
-                <FlexRow position="start">
-                  <Miniature src={curator.avatar_url} alt={curator.username} />
-                  <span>{curator.username}</span>
-                </FlexRow>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
+        <div className={"max-h-96 overflow-y-auto p-1"}>
+          <FlexColumn>
+          {filteredTopics.length > 0 &&
+            <Box title={`Topics (${filteredTopics.length})`}>
+              <div className={"max-h-60 overflow-y-auto"}>
+                <Menu>
+                  {filteredTopics.map((topic: Topic) => (
+                    <MenuItem key={topic.uuid}>
+                      <FlexRow position="start">
+                        <Miniature src={topic.curator.avatar_url} alt={topic.curator.username} />
+                        <span>{topic.name}</span>
+                      </FlexRow>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
+            </Box>
+          }
+          {filteredSubscriptions.length > 0 &&
+            <Box title={`Subscriptions (${filteredSubscriptions.length})`}>
+              <div className={"max-h-60 overflow-y-auto"}>
+                <Menu>
+                  {filteredSubscriptions.map((sub: Subscription) => (
+                    <MenuItem key={sub.uuid}>
+                      <FlexRow position="start">
+                        <Miniature src={sub.thumbnail} alt={sub.name} />
+                        <span>{sub.name}</span>
+                      </FlexRow>
+                    </MenuItem>
+                  ))}
+                </Menu>
+
+              </div>
+            </Box>
+          }
+          {filteredCurators.length > 0 &&
+            <Box title={`Curators (${filteredCurators.length})`}>
+              <div className={"max-h-60 overflow-y-auto"}>
+                <Menu>
+                  {filteredCurators.map((curator: Curator) => (
+                    <MenuItem key={curator.id}>
+                      <FlexRow position="start">
+                        <Miniature src={curator.avatar_url} alt={curator.username} />
+                        <span>{curator.username}</span>
+                      </FlexRow>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
+            </Box>
+          }
+          </FlexColumn>
+        </div>
       </FlexColumn>
     </Modal>
   );

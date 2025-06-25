@@ -13,6 +13,7 @@ type InputTextProps = {
   value?: string;
   disabled?: boolean;
   inputType?: InputType;
+  autofocus?: boolean;
 };
 
 const InputText = (
@@ -23,7 +24,8 @@ const InputText = (
     onClick = undefined,
     value = "",
     disabled = false,
-    inputType = InputType.TEXT
+    inputType = InputType.TEXT,
+    autofocus = false
   }: InputTextProps) => {
   const [searchValue, setSearchValue] = useState(value);
 

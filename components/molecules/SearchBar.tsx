@@ -31,7 +31,7 @@ const SearchBar = (
   }
 
   return (
-    <div className="relative flex flex-column">
+    <div className="relative flex flex-column w-full">
       <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-transparent">
         <MagnifyingGlassIcon/>
       </div>
