@@ -18,6 +18,7 @@ import { Curator } from '../../entities/Curators';
 import { paths } from '../../configuration';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { providerIconUrl } from '../../entities/Subscription';
 
 export const SearchModalId = 'search-modal';
 
@@ -99,7 +100,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
                   {filteredSubscriptions.map((sub: Subscription) => (
                     <MenuItem key={sub.uuid} onClick={() => handleNavigate(`${paths.SUBSCRIPTIONS}/${sub.uuid}`)}>
                       <FlexRow position="start">
-                        <Miniature src={sub.thumbnail} alt={sub.name} />
+                        <Miniature 
+                          src={sub.thumbnail} 
+                          alt={sub.name} 
+                          badgeImage={providerIconUrl(sub.provider)}
+                        />
                         <span>{sub.name}</span>
                       </FlexRow>
                     </MenuItem>
