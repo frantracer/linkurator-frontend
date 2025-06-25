@@ -15,6 +15,9 @@ import { useDebounce } from '../../hooks/useDebounce';
 import { Topic } from '../../entities/Topic';
 import { Subscription } from '../../entities/Subscription';
 import { Curator } from '../../entities/Curators';
+import { paths } from '../../configuration';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export const SearchModalId = 'search-modal';
 
@@ -23,6 +26,8 @@ interface SearchModalProps {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
+  const t = useTranslations('common');
+  const router = useRouter();
   const { profile, profileIsLoading } = useProfile();
   const { topics } = useTopics(profile, profileIsLoading);
   const { subscriptions } = useSubscriptions(profile);
@@ -31,28 +36,52 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearch = useDebounce(searchValue, 300);
 
-  const filteredTopics = (topics || []).filter((t: any) => t.name.toLowerCase().includes(debouncedSearch.toLowerCase()));
-  const filteredSubscriptions = (subscriptions || []).filter((s: any) => s.name.toLowerCase().includes(debouncedSearch.toLowerCase()));
-  const filteredCurators = (curators || []).filter((c: any) => c.username.toLowerCase().includes(debouncedSearch.toLowerCase()));
+  const filteredTopics = debouncedSearch === '' 
+    ? (topics || []) 
+    : (topics || []).filter((t: any) => t.name.toLowerCase().includes(debouncedSearch.toLowerCase()));
+  const filteredSubscriptions = debouncedSearch === '' 
+    ? (subscriptions || []) 
+    : (subscriptions || []).filter((s: any) => s.name.toLowerCase().includes(debouncedSearch.toLowerCase()));
+  const filteredCurators = debouncedSearch === '' 
+    ? (curators || []) 
+    : (curators || []).filter((c: any) => c.username.toLowerCase().includes(debouncedSearch.toLowerCase()));
+
+  const handleNavigate = (path: string) => {
+    router.push(path);
+    onClose?.();
+  };
 
   return (
     <Modal id={SearchModalId} onClose={onClose}>
 
       <FlexColumn>
-        <h1 className="font-bold text-xl w-full text-center">Search</h1>
+        <h1 className="font-bold text-xl w-full text-center">{t('search')}</h1>
         <SearchBar
-          placeholder="Search topics, subscriptions, curators..."
+          placeholder={t('search_topics_subscriptions_curators')}
           value={searchValue}
           handleChange={setSearchValue}
         />
-        <div className={"max-h-96 overflow-y-auto p-1"}>
+        <div className={"h-96 w-full overflow-y-auto p-1"}>
           <FlexColumn>
+          {filteredTopics.length === 0 && filteredSubscriptions.length === 0 && filteredCurators.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-center text-gray-500">
+              {debouncedSearch !== '' ? (
+                <p>{t('no_search_results')}</p>
+              ) : (
+                <div className="text-center">
+                  <p className="font-medium">{t('search_nothing_here')}</p>
+                  <p className="text-sm mt-1">{t('search_follow_first')}</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
           {filteredTopics.length > 0 &&
-            <Box title={`Topics (${filteredTopics.length})`}>
+            <Box title={`${t('topics')} (${filteredTopics.length})`}>
               <div className={"max-h-60 overflow-y-auto"}>
                 <Menu>
                   {filteredTopics.map((topic: Topic) => (
-                    <MenuItem key={topic.uuid}>
+                    <MenuItem key={topic.uuid} onClick={() => handleNavigate(`${paths.TOPICS}/${topic.uuid}`)}>
                       <FlexRow position="start">
                         <Miniature src={topic.curator.avatar_url} alt={topic.curator.username} />
                         <span>{topic.name}</span>
@@ -64,11 +93,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
             </Box>
           }
           {filteredSubscriptions.length > 0 &&
-            <Box title={`Subscriptions (${filteredSubscriptions.length})`}>
+            <Box title={`${t('subscriptions')} (${filteredSubscriptions.length})`}>
               <div className={"max-h-60 overflow-y-auto"}>
                 <Menu>
                   {filteredSubscriptions.map((sub: Subscription) => (
-                    <MenuItem key={sub.uuid}>
+                    <MenuItem key={sub.uuid} onClick={() => handleNavigate(`${paths.SUBSCRIPTIONS}/${sub.uuid}`)}>
                       <FlexRow position="start">
                         <Miniature src={sub.thumbnail} alt={sub.name} />
                         <span>{sub.name}</span>
@@ -81,11 +110,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
             </Box>
           }
           {filteredCurators.length > 0 &&
-            <Box title={`Curators (${filteredCurators.length})`}>
+            <Box title={`${t('curators')} (${filteredCurators.length})`}>
               <div className={"max-h-60 overflow-y-auto"}>
                 <Menu>
                   {filteredCurators.map((curator: Curator) => (
-                    <MenuItem key={curator.id}>
+                    <MenuItem key={curator.id} onClick={() => handleNavigate(`${paths.CURATORS}/${curator.id}`)}>
                       <FlexRow position="start">
                         <Miniature src={curator.avatar_url} alt={curator.username} />
                         <span>{curator.username}</span>
@@ -96,6 +125,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
               </div>
             </Box>
           }
+            </>
+          )}
           </FlexColumn>
         </div>
       </FlexColumn>

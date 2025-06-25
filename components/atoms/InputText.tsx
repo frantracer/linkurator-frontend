@@ -25,7 +25,6 @@ const InputText = (
     value = "",
     disabled = false,
     inputType = InputType.TEXT,
-    autofocus = false
   }: InputTextProps) => {
   const [searchValue, setSearchValue] = useState(value);
 

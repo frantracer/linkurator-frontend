@@ -67,7 +67,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
   const pathParamsArray = Array.isArray(pathParams.id) ? pathParams.id : [pathParams.id];
   const selectedId: string | undefined = pathParamsArray.length > 0 ? pathParamsArray[0] : undefined;
 
-  const [searchValue, setSearchValue] = useState<string>('');
   const {profile, profileIsLoading} = useProfile();
   const {subscriptions, refreshSubscriptions} = useSubscriptions(profile);
   const {curators, refreshCurators} = useCurators(profile, profileIsLoading);
@@ -238,7 +237,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
         {profile && <Divider/>}
         {profile && currentTab === 'subscriptions' &&
             <LateralSubscriptionList
-                searchValue={searchValue}
                 subscriptions={subscriptions}
                 topics={topics}
                 selectedSubscription={selectedSubscription}
@@ -247,14 +245,12 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
         }
         {profile && currentTab === 'topics' &&
             <LateralTopicList
-                searchValue={searchValue}
                 topics={topics}
                 closeMenu={closeMenu}
                 selectedTopic={selectedTopic}/>
         }
         {profile && currentTab === 'curators' &&
             <LateralCuratorList
-                searchValue={searchValue}
                 curators={curators}
                 closeMenu={closeMenu}
                 selectedCurator={selectedCurator}
