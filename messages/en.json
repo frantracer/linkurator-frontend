@@ -31,6 +31,8 @@
     "my_topics": "My topics",
     "other_topics": "Other topics",
     "topic_not_found": "Topic not found",
+    "item_not_found": "Item not found",
+    "subscription_not_found": "Subscription not found",
     "new_account": "New account",
     "register_with_google": "Sign up with Google",
     "or": "Or",

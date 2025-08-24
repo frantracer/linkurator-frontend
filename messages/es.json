@@ -31,6 +31,8 @@
         "my_topics": "Mis categorías",
         "other_topics": "Otras categorías",
         "topic_not_found": "Categoría no encontrada",
+        "item_not_found": "Elemento no encontrado",
+        "subscription_not_found": "Suscripción no encontrada",
         "new_account": "Nueva cuenta",
         "register_with_google": "Regístrate con Google",
         "or": "O",
