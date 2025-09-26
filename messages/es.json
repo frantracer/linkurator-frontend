@@ -267,7 +267,11 @@
         "message_limit_reached": "Límite de mensajes alcanzado (5/5). Inicia una nueva conversación para continuar.",
         "messages_remaining": "{remaining} mensajes restantes",
         "agent_error": "Error al generar una respuesta. Por favor, inténtalo de nuevo.",
-        "agent_rate_limit_error": "Demasiadas solicitudes, por favor espera unos minutos.\n\nTambién puedes registrarte para seguir usando el servicio de inmediato."
+        "agent_rate_limit_error": "Demasiadas solicitudes, por favor espera unos minutos.\n\nTambién puedes registrarte para seguir usando el servicio de inmediato.",
+        "search_results": "Resultados de búsqueda",
+        "latest_from_favorites": "Últimos de temas favoritos",
+        "no_videos_from_favorites": "No hay videos disponibles de tus temas favoritos",
+        "no_favorite_topics_message": "Aún no tienes temas favoritos. ¡Marca algunos temas como favoritos para ver sus últimos videos aquí!"
     },
     "legal": {
         "tos_title": "Términos del servicio",

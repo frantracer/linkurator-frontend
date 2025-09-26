@@ -267,7 +267,11 @@
     "message_limit_reached": "Message limit reached (5/5). Start a new conversation to continue.",
     "messages_remaining": "{remaining} messages remaining",
     "agent_error": "An error occurred while generating a response. Please try again.",
-    "agent_rate_limit_error": "Too many requests, please wait a few minutes.\n\nYou can also sign up to continue using the service immediately."
+    "agent_rate_limit_error": "Too many requests, please wait a few minutes.\n\nYou can also sign up to continue using the service immediately.",
+    "search_results": "Search Results",
+    "latest_from_favorites": "Latest from Favorite Topics",
+    "no_videos_from_favorites": "No videos available from your favorite topics",
+    "no_favorite_topics_message": "You don't have any favorite topics yet. Mark some topics as favorites to see their latest videos here!"
   },
   "legal": {
     "tos_title": "Terms of Service",
