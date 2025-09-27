@@ -114,10 +114,35 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
     closeMenu();
   }
 
+  const goToTopicsPage = () => {
+    closeMenu();
+    router.push(paths.TOPICS);
+    setCurrentTab('topics');
+  }
+
+  const goToSubscriptionsPage = () => {
+    closeMenu();
+    router.push(paths.SUBSCRIPTIONS);
+    setCurrentTab('subscriptions');
+  }
+
+  const goToCuratorsPage = () => {
+    closeMenu();
+    router.push(paths.CURATORS);
+    setCurrentTab('curators');
+  }
+
+  const goToProfilePage = () => {
+    closeMenu();
+    router.push(paths.PROFILE);
+    setCurrentTab('profile');
+  }
+
   const goToNewChat = () => {
     closeMenu();
     const newChatId = uuidv4();
     router.push(paths.CHATS + "/" + newChatId);
+    setCurrentTab('chats');
   }
 
   const openFilters = (page: CurrentPage) => {
@@ -157,8 +182,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
           <FlexItem>
             {profile &&
                 <ALink href={paths.PROFILE} onClick={() => {
-                  setCurrentTab('profile');
-                  closeMenu()
+                  goToProfilePage();
                 }}>
                     <Avatar src={profile.avatar_url} alt={profile.first_name}/>
                 </ALink>
@@ -196,7 +220,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
         {profile &&
             <Menu isFullHeight={false}>
                 <MenuItem onClick={() => {
-                  setCurrentTab('topics');
+                  goToTopicsPage();
                 }} selected={currentTab === 'topics'}>
                     <FlexRow position={"start"}>
                         <FlexItem>
@@ -213,7 +237,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                     </FlexRow>
                 </MenuItem>
                 <MenuItem onClick={() => {
-                  setCurrentTab('subscriptions');
+                  goToSubscriptionsPage();
                 }} selected={currentTab === 'subscriptions'}>
                     <FlexRow position={"start"}>
                         <FlexItem>
@@ -230,7 +254,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                     </FlexRow>
                 </MenuItem>
                 <MenuItem onClick={() => {
-                  setCurrentTab('curators');
+                  goToCuratorsPage();
                 }} selected={currentTab === 'curators'}>
                     <FlexRow position={"start"}>
                         <FlexItem>
@@ -247,7 +271,7 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                     </FlexRow>
                 </MenuItem>
                 <MenuItem onClick={() => {
-                  setCurrentTab('chats');
+                  goToNewChat();
                 }} selected={currentTab === 'chats'}>
                     <FlexRow position={"start"}>
                         <FlexItem>
@@ -255,11 +279,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                         </FlexItem>
                         <FlexItem grow={true}>
                           {t("chats")}
-                        </FlexItem>
-                        <FlexItem grow={false}>
-                            <Button fitContent={true} clickAction={goToNewChat}>
-                                <AddIcon/>
-                            </Button>
                         </FlexItem>
                     </FlexRow>
                 </MenuItem>
