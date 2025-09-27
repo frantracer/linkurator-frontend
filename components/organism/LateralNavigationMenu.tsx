@@ -9,7 +9,14 @@ import Divider from "../atoms/Divider";
 import Menu from "../atoms/Menu";
 import {MenuItem} from "../atoms/MenuItem";
 import FlexRow from "../atoms/FlexRow";
-import {AddIcon, BookmarkSquaredFilled, ChatBubbleFilledIcon, FunnelIcon, RectangleGroup, UserIconFilled} from "../atoms/Icons";
+import {
+  AddIcon,
+  BookmarkSquaredFilled,
+  ChatBubbleFilledIcon,
+  FunnelIcon,
+  RectangleGroup,
+  UserIconFilled
+} from "../atoms/Icons";
 import SearchBar from "../molecules/SearchBar";
 import LateralSubscriptionList from "./LateralSubscriptionList";
 import LateralTopicList from "./LateralTopicList";
@@ -34,8 +41,8 @@ import {SUBSCRIPTION_DETAILS_ID} from "./SubscriptionDetails";
 import {TOPIC_DETAILS_ID} from "./TopicDetails";
 import {CURATOR_DETAILS_ID} from "./CuratorDetails";
 import {useTranslations} from "next-intl";
-import SearchModal, { SearchModalId } from "./SearchModal";
-import { v4 as uuidv4 } from 'uuid';
+import SearchModal, {SearchModalId} from "./SearchModal";
+import {v4 as uuidv4} from 'uuid';
 
 export const LATERAL_NAVIGATION_MENU_ID = 'lateral-navigation-menu';
 
@@ -229,11 +236,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                         <FlexItem grow={true}>
                           {t("topics")}
                         </FlexItem>
-                        <FlexItem grow={false}>
-                            <Button fitContent={true} clickAction={openNewTopicModal}>
-                                <AddIcon/>
-                            </Button>
-                        </FlexItem>
                     </FlexRow>
                 </MenuItem>
                 <MenuItem onClick={() => {
@@ -246,11 +248,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                         <FlexItem grow={true}>
                           {t("subscriptions")}
                         </FlexItem>
-                        <FlexItem grow={false}>
-                            <Button clickAction={openNewSubscriptionModal}>
-                                <AddIcon/>
-                            </Button>
-                        </FlexItem>
                     </FlexRow>
                 </MenuItem>
                 <MenuItem onClick={() => {
@@ -262,11 +259,6 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
                         </FlexItem>
                         <FlexItem grow={true}>
                           {t("curators")}
-                        </FlexItem>
-                        <FlexItem grow={false}>
-                            <Button fitContent={true} clickAction={openFollowCuratorModal}>
-                                <AddIcon/>
-                            </Button>
                         </FlexItem>
                     </FlexRow>
                 </MenuItem>
@@ -285,26 +277,38 @@ export const LateralNavigationMenu = ({children}: LateralNavigationMenuProps) =>
             </Menu>
         }
         {profile && <Divider/>}
-        {profile && currentTab === 'subscriptions' &&
-            <LateralSubscriptionList
-                subscriptions={subscriptions}
-                topics={topics}
-                isLoading={subscriptionsAreLoading || topicsAreLoading}
-                selectedSubscription={selectedSubscription}
-                closeMenu={closeMenu}
-                openSyncModal={openNewSubscriptionModal}
-            />
-        }
         {profile && currentTab === 'topics' &&
-            <LateralTopicList
-                topics={topics}
-                subscriptions={subscriptions}
-                isLoading={topicsAreLoading || subscriptionsAreLoading}
-                closeMenu={closeMenu}
-                selectedTopic={selectedTopic}
-                openCreateTopicModal={openNewTopicModal}
-                openSyncSubscriptionModal={openNewSubscriptionModal}
-            />
+            <div className="flex flex-col overflow-auto">
+                <LateralTopicList
+                    topics={topics}
+                    subscriptions={subscriptions}
+                    isLoading={topicsAreLoading || subscriptionsAreLoading}
+                    closeMenu={closeMenu}
+                    selectedTopic={selectedTopic}
+                    openCreateTopicModal={openNewTopicModal}
+                    openSyncSubscriptionModal={openNewSubscriptionModal}
+                />
+                <Button fitContent={false} clickAction={openNewTopicModal}>
+                    <AddIcon/>
+                  {t("create_topic")}
+                </Button>
+            </div>
+        }
+        {profile && currentTab === 'subscriptions' &&
+            <div className="flex flex-col overflow-auto">
+                <LateralSubscriptionList
+                    subscriptions={subscriptions}
+                    topics={topics}
+                    isLoading={subscriptionsAreLoading || topicsAreLoading}
+                    selectedSubscription={selectedSubscription}
+                    closeMenu={closeMenu}
+                    openSyncModal={openNewSubscriptionModal}
+                />
+                <Button fitContent={false} clickAction={openNewSubscriptionModal}>
+                    <AddIcon/>
+                  {t("sync_subscriptions")}
+                </Button>
+            </div>
         }
         {profile && currentTab === 'curators' &&
             <LateralCuratorList
