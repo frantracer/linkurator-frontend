@@ -4,15 +4,10 @@ import {useTranslations} from "next-intl";
 import React, {useState} from "react";
 import {useRouter} from "next/navigation";
 import Button from "../../../components/atoms/Button";
-import FlexRow from "../../../components/atoms/FlexRow";
-import Grid from "../../../components/atoms/Grid";
 import {AddIcon} from "../../../components/atoms/Icons";
-import Drawer from "../../../components/molecules/Drawer";
 import SearchBar from "../../../components/molecules/SearchBar";
 import CreateFirstTopicHero from "../../../components/organism/CreateFirstTopicHero";
 import NewTopicModal, {NewTopicModalId} from "../../../components/organism/NewTopicModal";
-import VideoCard from "../../../components/organism/VideoCard";
-import {TOPIC_DETAILS_ID} from "../../../components/organism/TopicDetails";
 import {paths} from "../../../configuration";
 import useProfile from "../../../hooks/useProfile";
 import useSubscriptions from "../../../hooks/useSubscriptions";
@@ -22,18 +17,18 @@ import {useFavoriteTopicsItems} from "../../../hooks/useFavoriteTopicsItems";
 import {useDebounce} from "../../../hooks/useDebounce";
 import {openModal} from "../../../utilities/modalAction";
 import TopTitle from "../../../components/molecules/TopTitle";
-import useSet from "../../../hooks/useSet";
 import {Spinner} from "../../../components/atoms/Spinner";
 import {InfoBanner} from "../../../components/atoms/InfoBanner";
 import {Topic} from "../../../entities/Topic";
 import Miniature from "../../../components/atoms/Miniature";
+import TopicVideoCardGrid from "../../../components/organism/TopicVideoCardGrid";
+import {Filters} from "../../../entities/Filters";
 
 const TopicsHomePage = () => {
   const t = useTranslations("common");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const {set: invalidCards, add: addInvalidCard} = useSet<string>();
 
   const {profile, profileIsLoading} = useProfile();
   const {subscriptions} = useSubscriptions(profile);
@@ -46,6 +41,19 @@ const TopicsHomePage = () => {
   const hasFavoriteTopics = topics.some(topic => topic.is_favorite);
   const showSearchResults = searchQuery.length > 0;
   const displayedTopics = showSearchResults ? searchResults : [];
+
+  const noFilter: Filters = {
+    displayWithoutInteraction: true,
+    displayHidden: true,
+    displayViewed: true,
+    displayDiscouraged: true,
+    displayRecommended: true,
+    textSearch: "",
+    durationGroup: "all",
+    minDuration: 0,
+    maxDuration: 0,
+    excludedSubscriptions: [],
+  }
 
   const handleCreateTopic = () => {
     openModal(NewTopicModalId);
@@ -61,41 +69,39 @@ const TopicsHomePage = () => {
   };
 
   return (
-    <Drawer id={TOPIC_DETAILS_ID} right={true} alwaysOpenOnDesktop={false}>
+    <div>
       <TopTitle>
-        <div className="flex flex-row items-center overflow-visible">
-          <div className="flex-grow"/>
-          <div className="flex-grow items-center gap-2 overflow-hidden">
-            <div className="flex flex-col gap-2">
+        <div className="overflow-hidden">
+          <div className="flex flex-row items-center">
+            <div className="flex-grow items-center gap-2">
               <h1 className="text-xl text-center font-bold whitespace-nowrap truncate">
                 {t("topics")}
               </h1>
             </div>
           </div>
-          <div className="flex-grow"/>
+          {/* Search and Create Topic Section */}
+          <div className="flex flex-row items-center justify-center p-2">
+            <div className="flex-1 mr-4 max-w-96">
+              <SearchBar
+                placeholder={t("search_topic_placeholder")}
+                value={searchQuery}
+                handleChange={setSearchQuery}
+              />
+            </div>
+            {isUserLogged && (
+              <Button
+                primary={true}
+                clickAction={handleCreateTopic}
+              >
+                <AddIcon/>
+                <span>{t("create_topic")}</span>
+              </Button>
+            )}
+          </div>
         </div>
       </TopTitle>
 
-      <div className="p-4 space-y-6">
-        {/* Search and Create Topic Section */}
-        <FlexRow position="between">
-          <div className="flex-1 mr-4">
-            <SearchBar
-              placeholder={t("search_topic_placeholder")}
-              value={searchQuery}
-              handleChange={setSearchQuery}
-            />
-          </div>
-          {isUserLogged && (
-            <Button
-              primary={true}
-              clickAction={handleCreateTopic}
-            >
-              <AddIcon />
-              <span>{t("create_topic")}</span>
-            </Button>
-          )}
-        </FlexRow>
+      <div className="p-4 space-y-6 overflow-y-auto">
 
         {/* Search Results */}
         {showSearchResults && (
@@ -103,7 +109,7 @@ const TopicsHomePage = () => {
             <h2 className="text-lg font-semibold">{t("search_results")}</h2>
             {searchLoading && (
               <div className="flex justify-center py-4">
-                <Spinner />
+                <Spinner/>
               </div>
             )}
             {!searchLoading && displayedTopics.length === 0 && debouncedSearchQuery.length > 0 && (
@@ -140,25 +146,25 @@ const TopicsHomePage = () => {
             <h2 className="text-lg font-semibold">{t("latest_from_favorites")}</h2>
             {favoriteItemsLoading && (
               <div className="flex justify-center py-4">
-                <Spinner />
+                <Spinner/>
               </div>
             )}
             {!favoriteItemsLoading && favoriteItems.length > 0 && (
-              <Grid>
-                {favoriteItems
-                  .filter(item => !invalidCards.has(item.uuid))
-                  .map(item => (
-                    <div className="m-4" key={item.uuid}>
-                      <VideoCard
-                        item={item}
-                        onChange={() => handleVideoRefresh(item.uuid)}
-                        withInteractions={isUserLogged}
-                        addInvalidCard={addInvalidCard}
-                      />
-                    </div>
-                  ))
-                }
-              </Grid>
+              <TopicVideoCardGrid
+                fetchMoreItems={() => {
+                }}
+                refreshItem={handleVideoRefresh}
+                title={t("latest_from_favorites")}
+                items={favoriteItems}
+                subscriptions={subscriptions}
+                filters={noFilter}
+                isLoading={favoriteItemsLoading}
+                topicIsFinished={true}
+                handleScroll={() => {
+                }}
+                isTopicBeingScanned={false}
+                displayInteractions={true}
+              />
             )}
             {!favoriteItemsLoading && favoriteItems.length === 0 && (
               <InfoBanner>{t("no_videos_from_favorites")}</InfoBanner>
@@ -191,7 +197,7 @@ const TopicsHomePage = () => {
           refreshTopics={refreshTopics}
         />
       )}
-    </Drawer>
+    </div>
   );
 };
 

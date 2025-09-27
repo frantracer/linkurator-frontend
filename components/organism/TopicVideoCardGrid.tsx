@@ -1,5 +1,4 @@
 import VideoCard from "./VideoCard";
-import {Topic} from "../../entities/Topic";
 import React from "react";
 import {SubscriptionItem} from "../../entities/SubscriptionItem";
 import {Subscription} from "../../entities/Subscription";
@@ -14,7 +13,7 @@ import {useTranslations} from "next-intl";
 type TopicVideoCardGridProps = {
   fetchMoreItems: () => void,
   refreshItem: (itemId: string) => void,
-  topic: Topic | null;
+  title: string,
   items: SubscriptionItem[];
   subscriptions: Subscription[];
   filters: Filters;
@@ -30,21 +29,19 @@ const TopicVideoCardGrid = (props: TopicVideoCardGridProps) => {
   const t = useTranslations("common");
   const cards = [];
 
-  if (props.topic) {
-    for (let i = 0; i < props.items.length; i++) {
-      const item = props.items[i];
-      if (isItemShown(item, props.filters) && !invalidCards.has(item.uuid)) {
-        cards.push(
-          <div className="m-4" key={item.uuid}>
-            <VideoCard
-              item={item}
-              onChange={() => props.refreshItem(item.uuid)}
-              withInteractions={props.displayInteractions}
-              addInvalidCard={addInvalidCard}
-            />
-          </div>
-        );
-      }
+  for (let i = 0; i < props.items.length; i++) {
+    const item = props.items[i];
+    if (isItemShown(item, props.filters) && !invalidCards.has(item.uuid)) {
+      cards.push(
+        <div className="m-4" key={item.uuid}>
+          <VideoCard
+            item={item}
+            onChange={() => props.refreshItem(item.uuid)}
+            withInteractions={props.displayInteractions}
+            addInvalidCard={addInvalidCard}
+          />
+        </div>
+      );
     }
 
     if (!props.topicIsFinished && !props.isLoading && cards.length < ITEMS_PER_PAGE) {
@@ -58,7 +55,7 @@ const TopicVideoCardGrid = (props: TopicVideoCardGridProps) => {
           <div className="flex items-center justify-center h-dvh">
               <FlexRow position={"center"}>
                   <Spinner/>
-                  <span>{t("downloading_content", {title: props.topic?.name})}</span>
+                  <span>{t("downloading_content", {title: props.title})}</span>
               </FlexRow>
           </div>
       }

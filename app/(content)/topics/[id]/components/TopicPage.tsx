@@ -288,7 +288,7 @@ const TopicPageComponent = ({topicId}: { topicId: string }) => {
       }
       {
         selectedTopic &&
-          <TopicVideoCardGrid topic={selectedTopic}
+          <TopicVideoCardGrid title={selectedTopic.name}
                               items={topicItems}
                               fetchMoreItems={fetchMoreItems}
                               refreshItem={refreshTopicItem}
