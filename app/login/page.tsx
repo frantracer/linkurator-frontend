@@ -16,6 +16,7 @@ import {login} from "../../services/profileService";
 import {ErrorBanner} from "../../components/atoms/ErrorBanner";
 import LinkuratorHeader from "../../components/organism/LinkuratorHeader";
 import {useTranslations} from 'next-intl';
+import {isNative} from "../../utilities/platform";
 
 const RegisterErrorBanner = () => {
   const t = useTranslations("common");
@@ -64,9 +65,12 @@ const Home: NextPage = () => {
           <LinkuratorHeader/>
           <FlexColumn>
             <h2 className="text-3xl font-bold py-5">{t("log_in")}</h2>
-            <Button href={configuration.LOGIN_URL} fitContent={false}><GoogleIcon/>{t("log_in_with_google")}</Button>
-
-            <Divider text={t("or")}/>
+            {!isNative() && (
+              <>
+                <Button href={configuration.LOGIN_URL} fitContent={false}><GoogleIcon/>{t("log_in_with_google")}</Button>
+                <Divider text={t("or")}/>
+              </>
+            )}
 
             <Box>
               <FlexColumn>

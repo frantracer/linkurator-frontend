@@ -1,19 +1,14 @@
-'use server';
-
-import {cookies} from 'next/headers';
 import {Theme, defaultTheme} from './themeConfig';
 
-const COOKIE_NAME = 'theme';
+const STORAGE_KEY = 'theme';
 
 export async function getUserTheme(): Promise<Theme> {
-  const theme = (await cookies()).get(COOKIE_NAME)?.value as Theme | undefined;
-  return theme || defaultTheme;
+  if (typeof window === 'undefined') return defaultTheme;
+  return (localStorage.getItem(STORAGE_KEY) as Theme) || defaultTheme;
 }
 
 export async function setUserTheme(theme: Theme) {
-  (await cookies()).set(COOKIE_NAME, theme, {
-    maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
-    path: '/',
-    sameSite: 'lax'
-  });
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(STORAGE_KEY, theme);
+  document.documentElement.setAttribute('data-theme', theme);
 }

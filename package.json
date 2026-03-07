@@ -7,9 +7,21 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "build:capacitor": "CAPACITOR_BUILD=true NEXT_PUBLIC_CAPACITOR_BUILD=true next build",
+    "cap:sync": "npx cap sync",
+    "cap:ios": "yarn build:capacitor && npx cap sync ios && npx cap open ios",
+    "cap:android": "yarn build:capacitor && npx cap sync android && npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/browser": "^8.0.2",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/ios": "^8.2.0",
+    "@capacitor/keyboard": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "@tanstack/react-query": "5.90.12",
     "@types/uuid": "9.0.6",
     "@vercel/analytics": "1.4.1",

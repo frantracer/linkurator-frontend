@@ -1,6 +1,5 @@
 import {configuration} from "../configuration";
 import axios from "axios";
-import * as crypto from 'crypto';
 
 export type Profile = {
   first_name: string
@@ -51,14 +50,18 @@ export async function updateUsername(username: string): Promise<void> {
   }
 }
 
-function hashPassword(password: string): string {
+async function hashPassword(password: string): Promise<string> {
   const salt = 'linkuratorsalt';
   const saltedPassword = salt + password;
-  return crypto.createHash('sha256').update(saltedPassword).digest('hex');
+  const encoder = new TextEncoder();
+  const data = encoder.encode(saltedPassword);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 export async function login(email: string, password: string): Promise<void> {
-  const hashedPassword = hashPassword(password);
+  const hashedPassword = await hashPassword(password);
   const {status} = await axios.post(configuration.LOGIN_EMAIL_URL, {
     email: email,
     password: hashedPassword
@@ -71,7 +74,7 @@ export async function login(email: string, password: string): Promise<void> {
 export async function register(
   firstName: string, lastName: string, username: string, email: string, password: string,
 ): Promise<void> {
-  const hashedPassword = hashPassword(password);
+  const hashedPassword = await hashPassword(password);
   const {status} = await axios.post(configuration.REGISTER_EMAIL_URL, {
     email: email,
     password: hashedPassword,
@@ -99,7 +102,7 @@ export async function forgotPassword(email: string): Promise<void> {
 }
 
 export async function changePassword(password: string, requestId: string): Promise<void> {
-  const hashedPassword = hashPassword(password);
+  const hashedPassword = await hashPassword(password);
   const {status} = await axios.post(configuration.FORGOT_PASSWORD_URL + requestId,
     {new_password: hashedPassword});
   if (status !== 204) {

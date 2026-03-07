@@ -56,11 +56,11 @@ const HomePageComponent = () => {
   const hasFollowedCurators = curators.length > 0;
 
   const goToTopics = () => {
-    window.location.href = paths.TOPICS;
+    router.push(paths.TOPICS);
   }
 
   const goToChats = () => {
-    window.location.href = paths.CHATS;
+    router.push(paths.CHATS);
   }
 
   const refreshAllItems = () => {

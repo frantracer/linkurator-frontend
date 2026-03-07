@@ -1,12 +1,7 @@
-import ChatPageComponent from './components/ChatPage';
+export function generateStaticParams() {
+  return [{id: '_'}];
+}
 
-type ChatPageParams = {
-  params: Promise<{ id: string[] | string }>
-};
-
-export default async function ChatPage({params}: ChatPageParams) {
-  const {id} = await params;
-  const conversationId = Array.isArray(id) ? id[0] : id;
-
-  return <ChatPageComponent conversationId={conversationId}/>
+export default function ChatPage() {
+  return <div/>
 }

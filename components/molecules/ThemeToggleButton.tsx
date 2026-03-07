@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {MoonIcon, SunIcon} from "../atoms/Icons";
 import {setUserTheme} from "../../utilities/theme";
 import {Theme} from "../../utilities/themeConfig";
+import {configureStatusBar} from "../../utilities/statusBar";
 
 const ThemeToggleButton: React.FC = () => {
   const [theme, setTheme] = useState<Theme>(Theme.DARK);
@@ -17,6 +18,7 @@ const ThemeToggleButton: React.FC = () => {
     const newTheme = e.target.checked ? Theme.LIGHT : Theme.DARK;
     await setUserTheme(newTheme);
     setTheme(newTheme);
+    configureStatusBar(newTheme === Theme.DARK);
   };
 
   return (

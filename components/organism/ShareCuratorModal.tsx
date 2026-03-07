@@ -5,6 +5,7 @@ import FlexColumn from "../atoms/FlexColumn";
 import Button from "../atoms/Button";
 import {useTranslations} from "next-intl";
 import {LinkedinIcon, TwitterIcon} from "../atoms/Icons";
+import {openExternalLink} from "../../utilities/openExternalLink";
 
 export const ShareCuratorModalId = "share-curator-modal";
 
@@ -23,7 +24,7 @@ const ShareCuratorModal = (props: ShareCuratorModalProps) => {
   const shareToTwitter = () => {
     const message = t("share_curator_twitter_message") + "\n\n";
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(props.curatorUrl)}`;
-    window.open(url, '_blank');
+    openExternalLink(url);
     handleClose();
   }
 
@@ -31,7 +32,7 @@ const ShareCuratorModal = (props: ShareCuratorModalProps) => {
     const text = encodeURIComponent(t("share_curator_linkedin_message"));
     const curatorUrl = encodeURIComponent(props.curatorUrl);
     const url = `https://www.linkedin.com/feed/?shareActive=true&shareUrl=${curatorUrl}&text=${(text)}`;
-    window.open(url, '_blank');
+    openExternalLink(url);
     handleClose();
   }
 

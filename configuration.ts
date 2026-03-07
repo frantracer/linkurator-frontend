@@ -1,5 +1,8 @@
+const isCapacitorBuild = process.env.NEXT_PUBLIC_CAPACITOR_BUILD === 'true';
 const WEB_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://www.linkurator.com';
-const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:9000' : 'https://api.linkurator.com';
+const API_BASE_URL = isCapacitorBuild
+  ? 'https://api.linkurator.com'
+  : (process.env.NODE_ENV === 'development' ? 'http://localhost:9000' : 'https://api.linkurator.com');
 const SUBSCRIPTIONS_URL = `${API_BASE_URL}/subscriptions/`;
 const TOPICS_URL = `${API_BASE_URL}/topics/`;
 const ITEMS_URL = `${API_BASE_URL}/items/`;

@@ -15,6 +15,7 @@ import {ErrorBanner} from "../../components/atoms/ErrorBanner";
 import {register} from "../../services/profileService";
 import LinkuratorHeader from "../../components/organism/LinkuratorHeader";
 import { useTranslations } from "next-intl";
+import {isNative} from "../../utilities/platform";
 
 const Home: NextPage = () => {
   const t = useTranslations("common");
@@ -81,11 +82,14 @@ const Home: NextPage = () => {
           <FlexColumn>
             <h2 className="text-3xl font-bold py-5">{t("new_account")}</h2>
 
-            <Button href={configuration.REGISTER_URL} fitContent={false}>
-              <GoogleIcon/>{t("register_with_google")}
-            </Button>
-
-            <Divider text={t("or")}/>
+            {!isNative() && (
+              <>
+                <Button href={configuration.REGISTER_URL} fitContent={false}>
+                  <GoogleIcon/>{t("register_with_google")}
+                </Button>
+                <Divider text={t("or")}/>
+              </>
+            )}
 
             {!showForm &&
                 <Button fitContent={false} clickAction={() => setShowForm(!showForm)}>

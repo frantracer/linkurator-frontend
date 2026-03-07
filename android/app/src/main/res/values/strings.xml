@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Linkurator</string>
+    <string name="title_activity_main">Linkurator</string>
+    <string name="package_name">com.linkurator.app</string>
+    <string name="custom_url_scheme">com.linkurator.app</string>
+</resources>

@@ -13,6 +13,8 @@ import {openModal} from "../../utilities/modalAction";
 import ImportSubscriptionsModal, {ImportSubscriptionsModalId} from "./ImportSubscriptionsModal";
 import {Profile} from "../../services/profileService";
 import ProfileInfo from "./ProfileInfo";
+import {isNative} from "../../utilities/platform";
+import axios from "axios";
 
 type ProfileDropdownProps = {
   profile: Profile;
@@ -62,7 +64,16 @@ const ProfileDropdown = ({profile}: ProfileDropdownProps) => {
           </div>
         </MenuItem>
         <Divider/>
-        <MenuItem onClick={() => window.open(configuration.LOGOUT_URL, '_self')}>
+        <MenuItem onClick={async () => {
+          if (isNative()) {
+            try {
+              await axios.post(configuration.API_BASE_URL + '/logout/', {}, {withCredentials: true});
+            } catch { /* ignore */ }
+            window.location.href = paths.LOGIN;
+          } else {
+            window.open(configuration.LOGOUT_URL, '_self');
+          }
+        }}>
           <div className="flex flex-row items-center gap-2">
             <LogoutIcon/>
             {t("logout")}

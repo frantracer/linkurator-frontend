@@ -93,7 +93,8 @@ const BottomMenuMobile = () => {
 
   return (
     <div
-      className="flex flex-row bg-base-100 border-t-2 border-neutral items-center justify-around p-2 mt-0.5 lg:hidden w-full">
+      className="flex flex-row bg-base-100 border-t-2 border-neutral items-center justify-around p-2 mt-0.5 lg:hidden w-full"
+      style={{paddingBottom: 'var(--safe-area-bottom)'}}>
       <Button
         clickAction={openLateralMenu}
         fitContent={true}

@@ -22,6 +22,7 @@ import {useTranslations} from "next-intl";
 import AvatarGroup from "../atoms/AvatarGroup";
 import {useRouter} from "next/navigation";
 import {useToast} from "../../contexts/ToastContext";
+import {openExternalLink} from "../../utilities/openExternalLink";
 
 type VideoCardProps = {
   item: SubscriptionItem;
@@ -87,14 +88,8 @@ const VideoCard = (
     }
   };
 
-  const handleOpenItem = (itemUrl: string) => {
-    console.log(navigator.userAgent);
-    const isIOS = /iPad|iPhone/.test(navigator.userAgent);
-    if (isIOS) {
-      window.location.href = itemUrl;
-    } else {
-      window.open(itemUrl, "_blank");
-    }
+  const handleOpenItem = async (itemUrl: string) => {
+    await openExternalLink(itemUrl);
   };
 
   if (!inView) {
