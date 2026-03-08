@@ -1,5 +1,6 @@
 import {configuration} from "../configuration";
 import axios from "axios";
+import {storeAuthToken} from "../utilities/authToken";
 
 export type Profile = {
   first_name: string
@@ -62,12 +63,15 @@ async function hashPassword(password: string): Promise<string> {
 
 export async function login(email: string, password: string): Promise<void> {
   const hashedPassword = await hashPassword(password);
-  const {status} = await axios.post(configuration.LOGIN_EMAIL_URL, {
+  const {status, data} = await axios.post<{token: string}>(configuration.LOGIN_EMAIL_URL, {
     email: email,
     password: hashedPassword
   }, {withCredentials: true});
   if (status !== 200) {
     throw new Error("Error logging in");
+  }
+  if (data?.token) {
+    storeAuthToken(data.token);
   }
 }
 

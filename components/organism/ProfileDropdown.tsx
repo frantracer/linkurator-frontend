@@ -14,6 +14,7 @@ import ImportSubscriptionsModal, {ImportSubscriptionsModalId} from "./ImportSubs
 import {Profile} from "../../services/profileService";
 import ProfileInfo from "./ProfileInfo";
 import {isNative} from "../../utilities/platform";
+import {clearAuthToken} from "../../utilities/authToken";
 import axios from "axios";
 
 type ProfileDropdownProps = {
@@ -69,6 +70,7 @@ const ProfileDropdown = ({profile}: ProfileDropdownProps) => {
             try {
               await axios.post(configuration.API_BASE_URL + '/logout/', {}, {withCredentials: true});
             } catch { /* ignore */ }
+            clearAuthToken();
             window.location.href = paths.LOGIN;
           } else {
             window.open(configuration.LOGOUT_URL, '_self');
