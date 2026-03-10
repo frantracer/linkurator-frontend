@@ -8,7 +8,7 @@ export async function configureStatusBar(isDarkTheme: boolean): Promise<void> {
     await StatusBar.setStyle({
       style: isDarkTheme ? Style.Dark : Style.Light,
     });
-    await StatusBar.setOverlaysWebView({ overlay: true });
+    await StatusBar.setOverlaysWebView({ overlay: false });
   } catch {
     // StatusBar plugin not available
   }
